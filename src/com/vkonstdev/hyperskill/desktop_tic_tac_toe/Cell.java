@@ -6,16 +6,15 @@ import java.awt.event.ActionListener;
 
 public class Cell extends JButton {
 
-    private static final String EMPTY_CELL = " ";
-
     Cell(final String name, final ActionListener listener) {
-        super(EMPTY_CELL);
+        super(Mark.EMPTY.getMark());
         setName("Button" + name);
         setFont(new Font("Arial", Font.BOLD, 40));
         setBackground(Color.ORANGE);
         addActionListener(listener);
         setFocusPainted(false);
         setVisible(true);
+        setEnabled(false);
     }
 
     void setMark(final Mark mark) {
@@ -28,6 +27,11 @@ public class Cell extends JButton {
 
     void clear() {
         setText(Mark.EMPTY.getMark());
+    }
+
+    int getIndex() {
+        final var notation = this.getName().substring(6);
+        return ('3' - notation.charAt(1)) * 3 - 'A' + notation.charAt(0);
     }
 
     public enum Mark {
@@ -43,7 +47,5 @@ public class Cell extends JButton {
         public String getMark() {
             return mark;
         }
-
-
     }
 }

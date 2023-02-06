@@ -4,9 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Board extends JPanel {
@@ -69,6 +71,10 @@ public class Board extends JPanel {
         return cells.stream().map(JButton::getText).allMatch(String::isBlank);
     }
 
+    private boolean isEmpty(final int index) {
+        return cells.get(index).getText().isBlank();
+    }
+
     private boolean isFull() {
         return cells.stream().map(JButton::getText).noneMatch(String::isBlank);
     }
@@ -86,8 +92,22 @@ public class Board extends JPanel {
         return state == State.NOT_STARTED || state == State.PLAYING;
     }
 
-    /*public int[] getFreeCells() {
+    public int[] getFreeCells() {
         return IntStream.range(0, 9).filter(this::isEmpty).toArray();
-    }*/
+    }
+
+    public Cell getRandomFreeCell() {
+        final var freeCells = cells.stream()
+                .filter(cell -> cell.getText().equals(Cell.Mark.EMPTY.getMark()))
+                .collect(Collectors.toList());
+        Collections.shuffle(freeCells);
+        return freeCells.get(0);
+    }
+
+    void setPlaying(final boolean isPlaying) {
+        cells.forEach(cell -> cell.setEnabled(isPlaying));
+
+    }
+
 }
 
